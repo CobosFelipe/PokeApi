@@ -13,9 +13,9 @@ function mostrarPokemon(poke) {
   <p class="${type.type.name} tipo">${type.type.name}</p>
   `);
   types = types.join('');
+  let tipo = poke.types[0].type.name;
 
   let pokeId = poke.id.toString();
-  console.log(pokeId);
   if (pokeId.length === 1) {
     pokeId = "00" + pokeId;
   } if (pokeId.length === 2) {
@@ -23,7 +23,8 @@ function mostrarPokemon(poke) {
   }
 
   const div = document.createElement("div");
-  div.classList.add("pokemon")
+  div.classList.add(`pokemon`);
+  div.classList.add(`${tipo}`);
   div.innerHTML = `
     <p class="pokemon-id-back">#${pokeId}</p>
     <div class="pokemon-imagen">
