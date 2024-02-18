@@ -13,7 +13,6 @@ function mostrarPokemon(poke) {
   <p class="${type.type.name} tipo">${type.type.name}</p>
   `);
   types = types.join('');
-  let tipo = poke.types[0].type.name;
 
   let pokeId = poke.id.toString();
   if (pokeId.length === 1) {
@@ -24,7 +23,6 @@ function mostrarPokemon(poke) {
 
   const div = document.createElement("div");
   div.classList.add(`pokemon`);
-  div.classList.add(`${tipo}`);
   div.innerHTML = `
     <p class="pokemon-id-back">#${pokeId}</p>
     <div class="pokemon-imagen">
@@ -50,24 +48,29 @@ function mostrarPokemon(poke) {
 
 botonesHeader.forEach(boton => boton.addEventListener('click', (e) => {
   const botonId = e.currentTarget.id
-
+  
   listaPokemon.innerHTML = "";
-
+  let elementosPokemon = document.getElementsByClassName('pokemon');
+  
   for (let i = 1; i <= 151; i++) {
     fetch(Url + i)
       .then((response) => response.json())
       .then((data) => {
-
         if (botonId === "ver-todos") {
-          mostrarPokemon(data)
-        } else{
+          mostrarPokemon(data);
+        } else {
           const tipos = data.types.map(type => type.type.name);
           if (tipos.some(tipo => tipo.includes(botonId))) {
-          mostrarPokemon(data);
+            mostrarPokemon(data);
+            agregarClase(elementosPokemon, tipos);
+          }
         }
-        }
-
-        
       });
   }
-}))
+}));
+
+function agregarClase(elementos, tipos) {
+  for (let i = 0; i < elementos.length; i++) {
+    elementos[i].classList.add(`${tipos[0]}`);
+  }
+}
