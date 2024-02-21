@@ -2,11 +2,13 @@ const listaPokemon = document.querySelector("#listaPokemon");
 const botonesHeader = document.querySelectorAll(".btn-header");
 const Url = "https://pokeapi.co/api/v2/pokemon/";
 
+(async () => {
 for (let i = 1; i <= 151; i++) {
   fetch(Url + i)
     .then((response) => response.json())
     .then((data) => mostrarPokemon(data));
-}
+  }
+})();
 
 function mostrarPokemon(poke) {
   let types = poke.types.map((type) => `
