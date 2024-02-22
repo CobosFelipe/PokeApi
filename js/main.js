@@ -4,7 +4,7 @@ const Url = "https://pokeapi.co/api/v2/pokemon/";
 
 (async () => {
 for (let i = 1; i <= 151; i++) {
-  fetch(Url + i)
+  await fetch(Url + i)
     .then((response) => response.json())
     .then((data) => mostrarPokemon(data));
   }
@@ -48,31 +48,45 @@ function mostrarPokemon(poke) {
   listaPokemon.append(div);
 }
 
-botonesHeader.forEach(boton => boton.addEventListener('click', (e) => {
+botonesHeader.forEach(boton => boton.addEventListener('click', async (e) => {
   const botonId = e.currentTarget.id
   
   listaPokemon.innerHTML = "";
   let elementosPokemon = document.getElementsByClassName('pokemon');
   
+  const fetchPokemonData = async (pokemonNumber) => {
+    const response = await fetch(Url + pokemonNumber);
+    const data = await response.json();
+    return data;
+  };
+
+  const promises = [];
   for (let i = 1; i <= 151; i++) {
-    fetch(Url + i)
-      .then((response) => response.json())
-      .then((data) => {
-        if (botonId === "ver-todos") {
-          mostrarPokemon(data);
-        } else {
-          const tipos = data.types.map(type => type.type.name);
-          if (tipos.some(tipo => tipo.includes(botonId))) {
-            mostrarPokemon(data);
-            agregarClase(elementosPokemon, tipos);
-          }
-        }
-      });
+    promises.push(fetchPokemonData(i));
   }
+
+  const pokemonDataArray = await Promise.all(promises);
+
+  for (const data of pokemonDataArray) {
+    if (botonId === "ver-todos") {
+      mostrarPokemon(data);
+    } else {
+      const tipos = data.types.map(type => type.type.name);
+      if (tipos.some(tipo => tipo.includes(botonId))) {
+        mostrarPokemon(data);
+        agregarClase(elementosPokemon, tipos, botonId);
+      }
+    } 
+  }
+  
 }));
 
-function agregarClase(elementos, tipos) {
+function agregarClase(elementos, tipos, botonId) {
   for (let i = 0; i < elementos.length; i++) {
-    elementos[i].classList.add(`${tipos[0]}`);
+    if (elementos[i].classList.includes = `${botonId}`) {
+      elementos[i].classList.add(`${botonId}`);
+    } else{
+      console.log("No funciona la validacion");
+    }
   }
 }
