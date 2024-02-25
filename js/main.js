@@ -90,3 +90,10 @@ function agregarClase(elementos, tipos, botonId) {
     }
   }
 }
+
+const up = document.getElementById('up');
+
+up.addEventListener('click', ()=>{
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+})
